@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { Button, Gap, Header, TextInput } from '../../components'
 import { useForm } from '../../utils';
+import Axios from 'axios';
 
 const SignIn = ({navigation}) => {
 
@@ -11,8 +12,15 @@ const SignIn = ({navigation}) => {
         email: '',password: ''
     });
 
+    const urlApi = 'http://10.0.2.2:80/food-market-backend/public/api';
+
     const onSubmit = () => {
-        console.log('form :', form);
+        Axios.post(urlApi + '/login' , form).then((res) =>{
+            console.log(res);
+        })
+        .catch((err) =>{
+            console.log('erorr');
+        });
     }
 
     return (

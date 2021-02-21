@@ -1,23 +1,54 @@
-import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
-import { Button, Gap, Header, Select, TextInput } from '../../components'
+import React from 'react';
+import { StyleSheet, Text, View, ScrollView } from 'react-native';
+import { Button, Gap, Header, Select, TextInput } from '../../components';
+import { useForm } from '../../utils';
+import { useSelector, useDispatch } from 'react-redux';
+import Axios from 'axios';
 
 const Address = ( {navigation} ) => {
+
+    const [form, setForm] = useForm({
+        phoneNumber: '',
+        address: '',
+        houseNumber: '',
+        city: 'Jakarta'
+    });
+
+    const dispatch = useDispatch();
+    const registerReducer = useSelector(state => state.registerReducer);
+    const urlApi = 'http://10.0.2.2:80/food-market-backend/public/api';
+
+    const onSubmit = () => {
+        
+        dispatch({type: 'SET_ADDRESS', value: form});
+        const data = { ...form, ...registerReducer}
+        Axios.post(urlApi + '/register' , data).then((res) =>{
+            console.log(res);
+        })
+        .catch((err) =>{
+            console.log('erorr :', err);
+        });
+        // navigation.replace('SignUpFinish')
+    }
+
     return (
-        <View style={styles.page}>
-            <Header title="Address" subTitle="Make sure it's valid" onBack={() => {}}/>
-            <View style={styles.container}>
-                <TextInput label="Phone No." placeholder="Type your phone number"/>
-                <Gap height={16}/>
-                <TextInput label="Address" placeholder="Type your address"/>
-                <Gap height={16}/>
-                <TextInput label="House No" placeholder="Type your house number"/>
-                <Gap height={16}/>
-                <Select label="City" />
-                <Gap height={16}/>
-                <Button buttonColor="#FFC700" text="Sign Up Now" textButtonColor="#020202" onPress={() => navigation.replace('SignUpFinish')}/>
+        <ScrollView contentContainerStyle={{flexGrow: 1}}>
+            <View style={styles.page}>
+                <Header title="Address" subTitle="Make sure it's valid" onBack={() => {}}/>
+                <View style={styles.container}>
+                    <TextInput label="Phone No." value={form.name} onChangeText={(value) => setForm('phoneNumber', value)} placeholder="Type your phone number"/>
+                    <Gap height={16}/>
+                    <TextInput label="Address" value={form.address} onChangeText={(value) => setForm('address', value)} placeholder="Type your address"/>
+                    <Gap height={16}/>
+                    <TextInput label="House No" value={form.houseNumber} onChangeText={(value) => setForm('houseNumber', value)} placeholder="Type your house number"/>
+                    <Gap height={16}/>
+                    <Select value={form.city} onSelectChange={(value) => setForm('city', value)} label="City" />
+                    <Gap height={16}/>
+                    <Button buttonColor="#FFC700" text="Sign Up Now" textButtonColor="#020202" onPress={onSubmit}/>
+                </View>
             </View>
-        </View>
+        </ScrollView>
+        
     )
 }
 

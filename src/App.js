@@ -24,11 +24,15 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 import { SignIn, SplashScreen } from './pages';
 import Router from './router';
+import { Provider } from 'react-redux';
+import store from './redux/store';
 
 const App =  () =>  {
   return (
     <NavigationContainer>
-       <Router />
+       <Provider store={store}>
+         <Router />
+       </Provider>
     </NavigationContainer>
   );
 };

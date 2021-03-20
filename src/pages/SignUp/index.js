@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
-import { StyleSheet, Text, View, ScrollView} from 'react-native'
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Image} from 'react-native'
 import { Button, Gap, Header, TextInput } from '../../components'
 import { useSelector, useDispatch } from 'react-redux';
-import { useForm } from '../../utils';
-import { Value } from 'react-native-reanimated';
+import { useForm, showMessage } from '../../utils';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
 const SignUp = ({navigation}) => {
 
@@ -13,6 +13,8 @@ const SignUp = ({navigation}) => {
         password: '',
     });
 
+    const [photo, setPhoto] = useState('');
+
     const dispatch = useDispatch();
 
     const onSubmit = () => {
@@ -20,17 +22,53 @@ const SignUp = ({navigation}) => {
         navigation.navigate('Address')
     }
 
+    // function upload photo 
+    const addPhoto =  () => {
+
+        const options = {
+            quality: 0.5,
+            maxWidth: 200,
+            maxHeight: 200
+        }
+
+        launchImageLibrary(options, (response) => {
+          
+             if (response.didCancel || response.error) {
+                 showMessage('Anda belum memilih photo');
+             }  else {
+                 
+               const source = {uri: response.uri};
+
+               const dataImage = {
+                   uri: response.uri,
+                   type: response.type,
+                   name: response.fileName
+               };
+
+               setPhoto(source);
+               dispatch({type: 'SET_PHOTO', value: dataImage });
+               dispatch({type: 'SET_UPLOAD_STATUS', value: {isUploadPhoto : true}});
+             }
+          });
+    }
+    
     return (
         <ScrollView contentContainerStyle={{flexGrow: 1}}>
             <View style={styles.page}>
                 <Header title="Sign Up" subTitle="Register and eat" onBack={() => {}}/>
                 <View style={styles.container}>
                     <View style={styles.photo}>
-                        <View style={styles.borderPhoto}>
-                            <View style={styles.photoContainer}>
-                                <Text style={styles.addPhoto}>Add Photo</Text>
+                        <TouchableOpacity onPress={addPhoto}>
+                            <View style={styles.borderPhoto}>
+                                {
+                                    photo ? ( <Image style={styles.photoContainer} source = {photo}/>) 
+                                    : <View style={styles.photoContainer}> 
+                                          <Text style = {styles.addPhoto}> Add Photo </Text> 
+                                      </View> 
+                                }
+                              
                             </View>
-                        </View>
+                        </TouchableOpacity>
                     </View>
                     <TextInput label="Full Name" value={form.name} onChangeText={(value) => setForm('name', value)} placeholder="Type your fullname"/>
                     <Gap height={16}/>

@@ -10,6 +10,8 @@ import SummaryList from './SummaryList';
 import EmptyOrder from './EmptyOrder';
 import ExistOrder from './ExistOrder';
 import ProfileTabSection from './ProfileTabSection';
+import Loading from './Loading';
+
 
 export {
     Header,
@@ -23,5 +25,6 @@ export {
     SummaryList,
     EmptyOrder,
     ExistOrder,
-    ProfileTabSection
+    ProfileTabSection,
+    Loading
 };

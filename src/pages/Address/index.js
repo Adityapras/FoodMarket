@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, ScrollView } from 'react-native';
 import { Button, Gap, Header, Select, TextInput } from '../../components';
-import { useForm } from '../../utils';
+import { useForm, showMessage } from '../../utils';
 import { useSelector, useDispatch } from 'react-redux';
 import Axios from 'axios';
 
@@ -14,21 +14,55 @@ const Address = ( {navigation} ) => {
         city: 'Jakarta'
     });
 
-    const dispatch = useDispatch();
-    const registerReducer = useSelector(state => state.registerReducer);
-    const urlApi = 'http://10.0.2.2:80/food-market-backend/public/api';
+    const dispatch            = useDispatch();
+    const {registerReducer, photoReducer} = useSelector((state) => state);
+    const urlApi              = 'http://10.0.2.2:80/food-market-backend/public/api';
 
     const onSubmit = () => {
         
         dispatch({type: 'SET_ADDRESS', value: form});
+
         const data = { ...form, ...registerReducer}
-        Axios.post(urlApi + '/register' , data).then((res) =>{
-            console.log(res);
-        })
-        .catch((err) =>{
-            console.log('erorr :', err);
-        });
-        // navigation.replace('SignUpFinish')
+
+        dispatch({type: 'SET_LOADING', value: true});
+
+        //send data to api 
+        Axios.post(urlApi + '/register', data).then((res) => {
+                
+             
+                // if using upload photo
+                if (photoReducer.isUploadPhoto) {
+                    
+                    const photoForUpload = new FormData();
+                    photoForUpload.append('file', photoReducer);
+    
+                    // upload photo to api 
+                    Axios.post(urlApi + '/user/photo', photoForUpload, {
+                        headers: {
+                            'Authorization': `${res.data.data.token_type} ${res.data.data.access_token}`,
+                            'Content-Type': 'multipart/form-data'
+                        }
+                    }).then((responseUpload) => {
+                        console.log('succes upload', responseUpload);
+                    }).catch((err) => {
+                        showMessage('upload photo failed');
+                    })
+                }
+
+                showMessage('register success', 'success');
+                dispatch({
+                    type: 'SET_LOADING',
+                    value: false
+                });
+                // navigation.replace('SignUpFinish')
+            })
+            .catch((err) => {
+                dispatch({
+                    type: 'SET_LOADING',
+                    value: false
+                });
+                showMessage(`${err?.response?.data?.data?.message}`);
+            });
     }
 
     return (

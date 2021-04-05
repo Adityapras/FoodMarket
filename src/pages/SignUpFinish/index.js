@@ -15,7 +15,7 @@ const SignUpFinish = ( {navigation} ) => {
             <Gap height={30}/>
 
             <View style={styles.buttonContainer}>
-                <Button buttonColor="#FFC700" text="Find Foods" textButtonColor="#020202" onPress={() => navigation.replace('MainApp')}/>
+                <Button buttonColor="#FFC700" text="Find Foods" textButtonColor="#020202" onPress={() => navigation.reset({index: 0 , routes: [{name: 'MainApp'}]})}/>
             </View>
         </View>
     )

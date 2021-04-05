@@ -1,6 +1,7 @@
 import React from 'react'
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
 import { FoodDummy1 } from '../../../assets';
+import Number from '../Number';
 import Rating from '../Rating';
 
 const ItemList = ({
@@ -24,9 +25,9 @@ const ItemList = ({
                     <>
                         <View style={{flex: 1}}>
                             <Text style={styles.name}>{name}</Text>
-                            <Text style={styles.price}>IDR {price}</Text>
+                            <Number  number={price} style={styles.price}/>
                         </View>
-                        <Rating />  
+                        <Rating number={rating}/>  
                     </>
                 )
             case 'in-progress':
@@ -34,7 +35,7 @@ const ItemList = ({
                     <>
                         <View style={{flex: 1}}>
                             <Text style={styles.name}>{name}</Text>
-                            <Text style={styles.price}>{items} items.IDR {price}</Text>
+                            <Number  number={price} style={styles.price}/>
                         </View>
                     </>
                 )
@@ -43,7 +44,7 @@ const ItemList = ({
                     <>
                         <View style={{flex: 1}}>
                             <Text style={styles.name}>{name}</Text>
-                            <Text style={styles.price}>{items} items.IDR {price}</Text>
+                            <Number  number={price} style={styles.price}/>
                         </View>
                         <View>
                             <Text style={styles.date}>{date}</Text>
@@ -56,7 +57,7 @@ const ItemList = ({
                     <>
                         <View style={{flex: 1}}>
                             <Text style={styles.name}>{name}</Text>
-                            <Text style={styles.price}>IDR {price}</Text>
+                            <Number  number={price} style={styles.price}/>
                         </View>
                         <Rating />  
                     </>

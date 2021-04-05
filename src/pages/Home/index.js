@@ -1,9 +1,18 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { StyleSheet, Text, View, Image, ScrollView } from 'react-native';
 import { FoodDummy1, FoodDummy2, FoodDummy3, FoodDummy4 } from '../../assets';
 import { FoodCard, Gap, HomeTabSection, HomeProfile } from '../../components';
+import { getFoodData } from '../../redux/action';
 
-const Home = () => {
+const Home = ( {navigation} ) => {
+ 
+     const dispatch = useDispatch();
+     const { food } = useSelector(state => state.homeReducer)
+
+     useEffect(() => {
+        dispatch(getFoodData());
+     }, [])
 
     return (
         <ScrollView>
@@ -13,10 +22,9 @@ const Home = () => {
                     <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                         <View style={styles.foodContainer}>
                             <Gap width={24}/>
-                            <FoodCard image={ FoodDummy1 }/>
-                            <FoodCard image={ FoodDummy2 } />
-                            <FoodCard image={ FoodDummy3 } />
-                            <FoodCard image={ FoodDummy4 } />
+                            {food.map( (itemFood) => {
+                                return <FoodCard onPress={() => navigation.navigate('FoodDetail',  itemFood)} key={itemFood.id} name={itemFood.name} image={{uri: itemFood.picturePath}} rating={itemFood.rate}/>
+                            })}
                         </View>
                     </ScrollView>
                 </View>

@@ -4,6 +4,7 @@ import { Button, Gap, Header, Select, TextInput } from '../../components';
 import { useForm, showMessage } from '../../utils';
 import { useSelector, useDispatch } from 'react-redux';
 import Axios from 'axios';
+import { setLoading, singUpAction } from '../../redux/action';
 
 const Address = ( {navigation} ) => {
 
@@ -16,7 +17,6 @@ const Address = ( {navigation} ) => {
 
     const dispatch            = useDispatch();
     const {registerReducer, photoReducer} = useSelector((state) => state);
-    const urlApi              = 'http://10.0.2.2:80/food-market-backend/public/api';
 
     const onSubmit = () => {
         
@@ -24,51 +24,15 @@ const Address = ( {navigation} ) => {
 
         const data = { ...form, ...registerReducer}
 
-        dispatch({type: 'SET_LOADING', value: true});
+        dispatch(setLoading(true));
 
-        //send data to api 
-        Axios.post(urlApi + '/register', data).then((res) => {
-                
-             
-                // if using upload photo
-                if (photoReducer.isUploadPhoto) {
-                    
-                    const photoForUpload = new FormData();
-                    photoForUpload.append('file', photoReducer);
-    
-                    // upload photo to api 
-                    Axios.post(urlApi + '/user/photo', photoForUpload, {
-                        headers: {
-                            'Authorization': `${res.data.data.token_type} ${res.data.data.access_token}`,
-                            'Content-Type': 'multipart/form-data'
-                        }
-                    }).then((responseUpload) => {
-                        console.log('succes upload', responseUpload);
-                    }).catch((err) => {
-                        showMessage('upload photo failed');
-                    })
-                }
-
-                showMessage('register success', 'success');
-                dispatch({
-                    type: 'SET_LOADING',
-                    value: false
-                });
-                // navigation.replace('SignUpFinish')
-            })
-            .catch((err) => {
-                dispatch({
-                    type: 'SET_LOADING',
-                    value: false
-                });
-                showMessage(`${err?.response?.data?.data?.message}`);
-            });
+        dispatch(singUpAction(data, photoReducer, navigation));
     }
 
     return (
         <ScrollView contentContainerStyle={{flexGrow: 1}}>
             <View style={styles.page}>
-                <Header title="Address" subTitle="Make sure it's valid" onBack={() => {}}/>
+                <Header title="Address" subTitle="Make sure it's valid" onBack={() => navigation.goBack()}/>
                 <View style={styles.container}>
                     <TextInput label="Phone No." value={form.name} onChangeText={(value) => setForm('phoneNumber', value)} placeholder="Type your phone number"/>
                     <Gap height={16}/>

@@ -11,6 +11,8 @@ import EmptyOrder from './EmptyOrder';
 import ExistOrder from './ExistOrder';
 import ProfileTabSection from './ProfileTabSection';
 import Loading from './Loading';
+import Number from './Number';
+
 
 
 export {
@@ -26,5 +28,6 @@ export {
     EmptyOrder,
     ExistOrder,
     ProfileTabSection,
-    Loading
+    Loading,
+    Number
 };

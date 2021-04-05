@@ -5,6 +5,7 @@ import ItemList from '../ItemList';
 import { FoodDummy1, FoodDummy2, FoodDummy3, FoodDummy4, IcNext} from '../../../assets';
 import { useNavigation } from '@react-navigation/native';
 import ItemListMenu from '../ItemListMenu';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const renderTabBar = (props) => (
@@ -38,12 +39,18 @@ const renderTabBar = (props) => (
 const Account = () => {
   const navigation = useNavigation();
 
+    const signOut =  () => {
+      AsyncStorage.multiRemove(['userProfile', 'token']).then((res) =>{
+        navigation.reset({index: 0, routes: [{name : 'SignIn'}]});
+      });
+    }
     return(
       <View style = {styles.pageListMenu}>
         <ItemListMenu title='Edit Profile'/>
         <ItemListMenu title='Home Address'/>
         <ItemListMenu title='Security'/>
         <ItemListMenu title='Payments'/>
+        <ItemListMenu onPress={signOut} title='SignOut'/>
       </View>
     )
 };

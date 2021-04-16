@@ -1,17 +1,51 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { StyleSheet, Text, View, ImageBackground, TouchableOpacity} from 'react-native';
 import { FoodDummy1, IcBackWhite } from '../../assets';
 import { Button, Counter, Number, Rating } from '../../components';
+import { getData } from '../../utils';
 
 const FoodDetail = ( {navigation, route} ) => {
 
-    const {name, picturePath, description, ingredients, rate, price} = route.params;
+    const {name, picturePath, description, ingredients, rate, price, id} = route.params;
     const [totalItem, setTotalItem] = useState(1);
+    const [userProfile, setUserProfile] = useState({});
 
     const onCounterChange = (value) => {
         setTotalItem(value);
     }
 
+    useEffect(() => {
+        getData('userProfile').then( res => {
+            setUserProfile(res);
+        });
+    }, []);
+
+    const onOrder = () =>{
+        const totalPrice = totalItem * price ;
+        const driver     = 50000;
+        const tax        = 10 / 100 * totalPrice ;
+        const total      = tax + totalPrice + driver;
+
+        const data = {
+            item : {
+                id,
+                name,
+                price,
+                picturePath
+            },
+            transaction : {
+                totalItem,
+                totalPrice,
+                driver,
+                tax,
+                total
+            },
+            userProfile
+        }
+
+        console.log('transaction data: ', data);
+        navigation.navigate('OrderSummary', data);
+    }
     return (
         <View style={styles.page}>
             <ImageBackground source={ {uri:picturePath} } style={styles.cover}>
@@ -40,7 +74,7 @@ const FoodDetail = ( {navigation, route} ) => {
                         <Number number={totalItem * price} style={styles.priceTotal}/>
                     </View>
                     <View style={styles.buttonOrder}>
-                        <Button onPress={() => navigation.navigate('OrderSummary') } text="Order Now" buttonColor="#FFC700" />
+                        <Button onPress={onOrder} text="Order Now" buttonColor="#FFC700" />
                     </View>
                 </View>
             </View>

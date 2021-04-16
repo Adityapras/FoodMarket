@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { StyleSheet, Text, View, Image, ScrollView } from 'react-native';
-import { FoodDummy1, FoodDummy2, FoodDummy3, FoodDummy4 } from '../../assets';
 import { FoodCard, Gap, HomeTabSection, HomeProfile } from '../../components';
 import { getFoodData } from '../../redux/action';
 

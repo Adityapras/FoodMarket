@@ -1,11 +1,13 @@
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
+import Number from '../Number';
 
-const SummaryList = ({title, subTitle, textColor, items}) => {
+const SummaryList = ({title, value, textColor, type}) => {
     return (
         <View style={styles.transactionDetail}>
             <Text style={styles.titleFoodName}>{title}</Text>
-            <Text style={styles.priceSubTotal(textColor)}> {items ? <Text>IDR</Text>  : ''} {subTitle}</Text>
+            
+            {type === 'currency' ? <Number number={value} style={styles.priceSubTotal(textColor)} /> : <Text style={styles.priceSubTotal(textColor)}> {value}</Text> }
         </View>
     )
 }

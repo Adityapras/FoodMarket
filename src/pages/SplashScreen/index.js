@@ -10,7 +10,6 @@ const SplashScreen = ({navigation}) => {
         setTimeout(() => {
             // navigation.replace('SignIn');
             getData('token').then((res) =>{
-                console.log('token: ',res);
                 if (res) {
                     navigation.reset({index: 0, routes: [{name: 'MainApp'}]});
                 }else{

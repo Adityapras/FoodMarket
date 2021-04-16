@@ -51,7 +51,6 @@ export const singUpAction = (dataRegister, photoReducer, navigation) => (dispatc
         .catch((err) => {
             dispatch(setLoading(false));
             showMessage(`${err?.response?.data?.data?.message}`);
-            console.log(err)
         });
 }
 

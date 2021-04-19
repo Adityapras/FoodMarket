@@ -14,7 +14,8 @@ const ItemList = ({
         items,
         type,
         date,
-        status
+        status,
+        wordsColor
     }) => {
 
     const renderTab = () =>{
@@ -35,11 +36,16 @@ const ItemList = ({
                     <>
                         <View style={{flex: 1}}>
                             <Text style={styles.name}>{name}</Text>
-                            <Number  number={price} style={styles.price}/>
+                            <View style={styles.row}>
+                                <Text style={styles.price}> {items} items </Text>
+                                <View style={styles.dot}/>
+                                <Number  number={price} style={styles.price}/>
+                            </View>
                         </View>
                     </>
                 )
             case 'past-orders':
+                const formatedDate = new Date(date).toDateString();
                 return(
                     <>
                         <View style={{flex: 1}}>
@@ -47,8 +53,8 @@ const ItemList = ({
                             <Number  number={price} style={styles.price}/>
                         </View>
                         <View>
-                            <Text style={styles.date}>{date}</Text>
-                            <Text style={styles.status}>{status}</Text>
+                            <Text style={styles.date}>{formatedDate}</Text>
+                            <Text style={styles.status(wordsColor)}>{status}</Text>
                         </View>
                     </>
                 )
@@ -115,9 +121,21 @@ const styles = StyleSheet.create({
         fontFamily: 'Poppins-Regular',
         color: '#8D92A3'
     },
-    status: {
+    status:(wordsColor) =>({
         fontSize: 10,
         fontFamily: 'Poppins-Regular',
-        color: '#8D92A3'
+        color: wordsColor
+
+    }),
+    row : {
+        flexDirection: 'row',
+        alignItems: 'center'
+    },
+    dot: {
+        width: 3,
+        height: 3,
+        borderRadius: 3,
+        backgroundColor: '#8D92A3',
+        marginHorizontal: 4
     }
 })

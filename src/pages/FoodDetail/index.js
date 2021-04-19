@@ -43,7 +43,6 @@ const FoodDetail = ( {navigation, route} ) => {
             userProfile
         }
 
-        console.log('transaction data: ', data);
         navigation.navigate('OrderSummary', data);
     }
     return (

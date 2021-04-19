@@ -1,7 +1,8 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Gap } from '../../atoms';
-import { Header } from '../Header';
+import Header from '../Header';
+
 import OrderTabSection  from '../OrderTabSection';
 
 const ExistOrder = () => {

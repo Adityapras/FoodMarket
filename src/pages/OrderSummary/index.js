@@ -9,18 +9,9 @@ import { WebView } from 'react-native-webview';
 
 const OrderSummary = ( {navigation, route} ) => {
     const {item, transaction, userProfile} = route.params;
-    const [token, setToken] = useState('');
     const [isPaymentOpen, setIsPaymentOpen] = useState(false);
     const [paymentURL, setpaymentURL] = useState('https://www.google.com');
 
-
-    useEffect(() => {
-        getData('token').then(res =>{
-            setToken(res.value);
-        });
-    }, [])
-
-    console.log(`${API_HOST.url}/checkout`);
     const onCheckout = () =>{
 
         const data = {
@@ -30,23 +21,24 @@ const OrderSummary = ( {navigation, route} ) => {
             total: transaction.total,
             status: 'PENDING'
         }
-
-        Axios.post(`${API_HOST.url}/checkout`, data, {
-            headers: {
-                'Authorization' : token
-            }
-        }).then(res => {
-            console.log('checkout succes : ', res.data);
-            setIsPaymentOpen(true);
-            setpaymentURL(res.data.data.payment_url);
-        }).catch(err => {
-            console.log('checkout error : ', err);
+        getData('token').then(res =>{
+            Axios.post(`${API_HOST.url}/checkout`, data, {
+                headers: {
+                    'Authorization' : res.value
+                }
+            }).then(res => {
+                console.log('checkout succes : ', res.data);
+                setIsPaymentOpen(true);
+                setpaymentURL(res.data.data.payment_url);
+            }).catch(err => {
+                console.log('checkout error : ', err);
+            });
         });
+        
     }
 
     const onNavChange = (state) => {
-        const titleWeb = 'Testing';
-        console.log(state)
+        const titleWeb = 'Example Domain';
         if(state.title === titleWeb)
         {   
             navigation.replace('SuccessOrder');

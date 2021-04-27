@@ -2,7 +2,6 @@ import React, {useEffect} from 'react'
 import { StyleSheet, Text, View, Dimensions, ScrollView } from 'react-native'
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import ItemList from '../ItemList';
-import { FoodDummy1, FoodDummy2, FoodDummy3, FoodDummy4} from '../../../assets';
 import { useNavigation } from '@react-navigation/native';
 import { getInProgress, getPastOrders } from '../../../redux/action';
 import { useDispatch,useSelector } from 'react-redux';
@@ -58,7 +57,7 @@ const InProgress = () => {
             price={order.total} 
             items={order.quantity}
             wordsColor='#8D92A3'
-            onPress={() => navigation.navigate('FoodDetail')}/>
+            onPress={() => navigation.navigate('OrderDetail', order)}/>
           )}
         </View>
       </ScrollView>
@@ -89,7 +88,7 @@ const PastOrder = () => {
             price={order.total} 
             items={order.quantity}
             wordsColor={order.status === 'CANCELLED' ? 'red' : 'green' }
-            onPress={() => navigation.navigate('FoodDetail')}/>
+            onPress={() => navigation.navigate('OrderDetail', order)}/>
         )}
       </View>
     </ScrollView>

@@ -1,17 +1,28 @@
-import React from 'react'
+import React, { useEffect,useState } from 'react'
 import { StyleSheet, Text, View, Image} from 'react-native'
 import { ProfileDummyFull } from '../../assets';
 import { Gap, ProfileTabSection } from '../../components';
+import { getData } from '../../utils';
 
 const Profile = () => {
+
+    const [userProfile, setUserProfile] = useState({});
+
+ 
+    useEffect(() => {
+        getData('userProfile').then(res => {
+            setUserProfile(res);
+        })    
+    }, []);
+
     return (
         <View style={styles.page}>
             <View style={styles.container}>
                 <View style={styles.borderOutline}>
-                    <Image style={styles.photo} source={ ProfileDummyFull }/>
+                    <Image style={styles.photo} source={ {uri: userProfile.profile_photo_url} }/>
                 </View>
-                <Text style={styles.name}>Wanda Vision</Text>
-                <Text style={styles.email}>Wanda@gmail.com</Text>
+                <Text style={styles.name}>{userProfile.name}</Text>
+                <Text style={styles.email}>{userProfile.email}</Text>
             </View>
             <Gap height={24}/>
             <ProfileTabSection />

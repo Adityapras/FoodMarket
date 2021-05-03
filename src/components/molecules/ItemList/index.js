@@ -45,7 +45,7 @@ const ItemList = ({
                     </>
                 )
             case 'past-orders':
-                const formatedDate = new Date(date).toDateString();
+                const formatedDate = new Date(date * 1000).toDateString();
                 return(
                     <>
                         <View style={{flex: 1}}>

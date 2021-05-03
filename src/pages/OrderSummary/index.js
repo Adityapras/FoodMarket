@@ -22,6 +22,7 @@ const OrderSummary = ( {navigation, route} ) => {
             status: 'PENDING'
         }
         getData('token').then(res =>{
+            console.log(res)
             Axios.post(`${API_HOST.url}/checkout`, data, {
                 headers: {
                     'Authorization' : res.value
@@ -31,7 +32,7 @@ const OrderSummary = ( {navigation, route} ) => {
                 setIsPaymentOpen(true);
                 setpaymentURL(res.data.data.payment_url);
             }).catch(err => {
-                console.log('checkout error : ', err);
+                console.log('checkout error : ', err.response);
             });
         });
         

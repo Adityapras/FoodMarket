@@ -32,6 +32,8 @@ const SignIn = ({navigation}) => {
                 <Button buttonColor="#FFC700" text="Sign In" textButtonColor="#020202" onPress={onSubmit}/>
                 <Gap height={12}/>
                 <Button buttonColor="#8D92A3" text="Register" textButtonColor="#FFFFFF" onPress={() => navigation.navigate('SignUp')}/>
+                <Gap height={12}/>
+                <Text style={styles.credits}>Develop By Aditya Prasetyo</Text>
             </View>
         </View>
     )
@@ -50,5 +52,12 @@ const styles = StyleSheet.create({
         paddingTop: 26,
         marginTop : 24,
         flex : 1
+    },
+    credits : {
+        fontSize : 14,
+        fontFamily : 'Poppins-Regular',
+        color : '#8D92A3',
+        textAlign : 'center',
+        fontWeight : 'bold'
     }
 })

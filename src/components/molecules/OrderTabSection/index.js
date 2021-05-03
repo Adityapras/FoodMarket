@@ -71,8 +71,9 @@ const PastOrder = () => {
 
   useEffect(() => {
     dispatch(getPastOrders());
+    
   }, []);
-
+console.log(pastOrders);
   return(
       <ScrollView>
       <View>

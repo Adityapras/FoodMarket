@@ -7,6 +7,9 @@ import { API_HOST, API_PATH } from '../../config';
 
 export const singUpAction = (dataRegister, photoReducer, navigation) => (dispatch) => {
 
+    
+    let emailError    = '';
+    let passwordError = '';
     //send data to api 
     Axios.post(`${API_HOST.url}/register`, dataRegister).then((res) => {
 
@@ -34,7 +37,6 @@ export const singUpAction = (dataRegister, photoReducer, navigation) => (dispatc
                     userProfile.profile_photo_url = `${API_PATH.url}/${res_upload_photo.data.data[0]}`;
                     storeData('userProfile', userProfile);
                     navigation.reset( { index: 0, routes: [{name : 'SignUpFinish' }] });
-
                 }).catch((err) => {
 
                     showMessage('upload photo gagal');
@@ -47,10 +49,20 @@ export const singUpAction = (dataRegister, photoReducer, navigation) => (dispatc
             }
 
             dispatch(setLoading(false)); 
-        })
-        .catch((err) => {
+        }).catch((err) => {
             dispatch(setLoading(false));
-            showMessage(`${err?.response?.data?.data?.message}`);
+
+            if(err?.response?.data?.data?.error?.email?.length > 0)
+            {
+                emailError = err.response.data.data.error.email[0];
+            }
+            if(err?.response?.data?.data?.error?.password?.length > 0)
+            {
+                passwordError = err.response.data.data.error.password[0];
+            }
+
+            showMessage(`${emailError} , ${passwordError}`);
+
         });
 }
 
@@ -61,7 +73,7 @@ export const signInAction =  (form, navigation) => (dispatch) => {
         const token = `${res.data.data.token_type} ${res.data.data.access_token}`;
         dispatch(setLoading(false));
         storeData('token', {value: token});
-        userProfile.profile_photo_url = `http://10.0.2.2:80/food-market-backend/public/storage/${res.data.data.user.profile_photo_path}`;
+        userProfile.profile_photo_url =  `${API_PATH.url}/${res.data.data.user.profile_photo_path}`;
         storeData('userProfile', userProfile);
         navigation.reset({index: 0, routes: [{name:'MainApp'}]});
     })
